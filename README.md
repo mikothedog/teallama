@@ -6,7 +6,7 @@ A sleek, terminal-based UI for Ollama built with Go, [Bubble Tea](https://github
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 <p align="center">
-  <img src="./assets/demo.png" alt="Teallama Screenshot" width="800">
+  <img src="./assets/chat.png" alt="Teallama Screenshot" width="800">
 </p>
 
 ## Features
