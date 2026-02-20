@@ -4,52 +4,77 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
-	"teallama/models" // Import your local module
-	"time"
+
+	"teallama/models"
 )
 
-// Client talks to Ollama HTTP API.
 type Client struct {
 	URL   string
-	Model string
+	Model string // Selected model
 	http  *http.Client
 }
 
-// New creates a client. Exported (capital N).
-func New(url, model string) *Client {
+func New(url string) *Client {
 	return &Client{
-		URL:   url,
-		Model: model,
-		http:  &http.Client{Timeout: 120 * time.Second},
+		URL:  url,
+		http: &http.Client{Timeout: 0}, // No timeout for streaming
 	}
 }
 
-// Generate sends prompt and returns response. Blocking call.
-// Returns (string, error) - we'll wrap it in a tea.Cmd later.
-func (c *Client) Generate(prompt string, history []models.Message) (string, error) {
+func (c *Client) SetModel(model string) {
+	c.Model = model
+}
+
+// ListModels fetches available models from Ollama
+func (c *Client) ListModels() ([]string, error) {
+	resp, err := c.http.Get(c.URL + "/api/tags")
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var result struct {
+		Models []struct {
+			Name string `json:"name"`
+		} `json:"models"`
+	}
+
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return nil, err
+	}
+
+	names := make([]string, len(result.Models))
+	for i, m := range result.Models {
+		names[i] = m.Name
+	}
+	return names, nil
+}
+
+// StreamRequest initiates a streaming generation and returns the response body
+func (c *Client) StreamRequest(prompt string, history []models.Message) (*http.Response, error) {
 	type request struct {
 		Model  string `json:"model"`
 		Prompt string `json:"prompt"`
 		Stream bool   `json:"stream"`
 	}
 
-	fullPrompt := models.HistoryToString(history) + "User: " + prompt + "\nAssistant: "
+	// Build context from history
+	var context string
+	for _, msg := range history {
+		role := "Assistant"
+		if msg.IsUser {
+			role = "User"
+		}
+		context += role + ": " + msg.Content + "\n"
+	}
+	context += "User: " + prompt + "\nAssistant: "
 
 	body, _ := json.Marshal(request{
 		Model:  c.Model,
-		Prompt: fullPrompt,
-		Stream: false, // Simpler for now
+		Prompt: context,
+		Stream: true,
 	})
 
-	resp, err := c.http.Post(c.URL, "application/json", bytes.NewReader(body))
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
-
-	var result struct {
-		Response string `json:"response"`
-	}
-	json.NewDecoder(resp.Body).Decode(&result)
-	return result.Response, nil
+	resp, err := c.http.Post(c.URL+"/api/generate", "application/json", bytes.NewReader(body))
+	return resp, err
 }
