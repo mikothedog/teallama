@@ -1,4 +1,4 @@
-module teallama
+module github.com/mikothedog/teallama
 
 go 1.25.7
 
