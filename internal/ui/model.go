@@ -39,7 +39,7 @@ type Model struct {
 
 func New(client *ollama.Client) Model {
 	ta := textarea.New()
-	ta.Placeholder = "Send a message..."
+	ta.Placeholder = "What are you pondering?"
 	ta.ShowLineNumbers = false
 	ta.SetHeight(3)
 	ta.FocusedStyle.CursorLine = lipgloss.NewStyle()
