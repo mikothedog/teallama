@@ -10,15 +10,7 @@ import (
 func (m Model) viewSelect() string {
 	var b strings.Builder
 
-	title := `
-  ████████╗███████╗ █████╗ ██╗     ██╗      █████╗ ███╗   ███╗ █████╗ 
-  ╚══██╔══╝██╔════╝██╔══██╗██║     ██║     ██╔══██╗████╗ ████║██╔══██╗
-     ██║   █████╗  ███████║██║     ██║     ███████║██╔████╔██║███████║
-     ██║   ██╔══╝  ██╔══██║██║     ██║     ██╔══██║██║╚██╔╝██║██╔══██║
-     ██║   ███████╗██║  ██║███████╗███████╗██║  ██║██║ ╚═╝ ██║██║  ██║
-     ╚═╝   ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝`
-
-	b.WriteString(HeaderStyle.Render(title) + "\n")
+	b.WriteString(HeaderStyle.Render(Logo) + "\n")
 	b.WriteString(SubtleStyle.Render("  Choose your AI model\n"))
 	b.WriteString(SubtleStyle.Render("\n"))
 
@@ -58,8 +50,8 @@ func (m Model) viewSelect() string {
 }
 
 func (m Model) viewChat() string {
-	logo := "TEALLAMA"
-	header := HeaderStyle.Render(logo)
+	// logo := "TEALLAMA"
+	header := HeaderStyle.Render(Logo)
 	indicator := SubtleStyle.Render(fmt.Sprintf("Model: %s", m.client.Model))
 	chatArea := ChatBorder.Render(m.viewport.View())
 	help := SubtleStyle.Render("Enter to send • Ctrl+C to quit")

@@ -8,7 +8,6 @@ import (
 	"github.com/charmbracelet/bubbles/textarea"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 	"github.com/mikothedog/teallama/internal/commands"
 	"github.com/mikothedog/teallama/internal/models"
 	"github.com/mikothedog/teallama/internal/ollama"
@@ -42,9 +41,13 @@ func New(client *ollama.Client) Model {
 	ta.Placeholder = "What are you pondering?"
 	ta.ShowLineNumbers = false
 	ta.SetHeight(3)
-	ta.FocusedStyle.CursorLine = lipgloss.NewStyle()
+	ta.Prompt = ""
 	ta.KeyMap.InsertNewline.SetEnabled(false)
-	ta.Focus()
+
+	ta.FocusedStyle.Base = TextAreaFocused
+	ta.FocusedStyle.CursorLine = TextAreaCursorLine
+	ta.FocusedStyle.Text = TextAreaText
+	ta.BlurredStyle.Base = TextAreaBlurred
 
 	vp := viewport.New(80, 20)
 
@@ -83,8 +86,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			headerHeight := 6
 			inputHeight := 4
 			m.viewport.Width = msg.Width - 4
-			m.viewport.Height = msg.Height - headerHeight - inputHeight - 4
-			m.textarea.SetWidth(msg.Width - 4)
+			m.viewport.Height = msg.Height - headerHeight - inputHeight - 4 - LogoHeight
+			m.textarea.SetWidth(msg.Width)
 			m.viewport.SetContent(m.renderMessages())
 		}
 		return m, nil

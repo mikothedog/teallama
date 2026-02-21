@@ -4,29 +4,25 @@ import "github.com/charmbracelet/lipgloss"
 
 // Use ANSI 0-15 colors to inherit terminal theme
 var (
-	// Primary accents using terminal's blue/magenta
-	Primary   = lipgloss.Color("4") // Maps to theme's blue
-	Secondary = lipgloss.Color("5") // Maps to theme's magenta/purple
-	Accent    = lipgloss.Color("6") // Maps to theme's cyan/teal
+	Color1 = lipgloss.Color("1")
+	Color2 = lipgloss.Color("2")
+	Color3 = lipgloss.Color("3")
 
-	Red       = lipgloss.Color("1") // Maps to theme's red
-	Turquoise = lipgloss.Color("2") // Maps to theme's turquoise
-	Yellow    = lipgloss.Color("3") // Maps to theme's yellow
+	Primary   = lipgloss.Color("4")
+	Secondary = lipgloss.Color("5")
+	Accent    = lipgloss.Color("6")
 
-	// Text colors using terminal's foreground
-	Text       = lipgloss.Color("7")  // Normal white/fg
-	TextDim    = lipgloss.Color("8")  // Bright black (gray)
-	TextBright = lipgloss.Color("15") // Bright white (bold)
+	Text       = lipgloss.Color("7")
+	TextDim    = lipgloss.Color("8")
+	TextBright = lipgloss.Color("15")
 
-	// Chat bubbles - use ANSI colors for backgrounds
 	UserStyle = lipgloss.NewStyle().
-			Foreground(Red).
+			Foreground(Color1).
 			Bold(true).
 			MarginLeft(2)
 
 	UserBubble = lipgloss.NewStyle().
 			Foreground(TextBright).
-			Background(lipgloss.Color("0")).
 			Border(lipgloss.RoundedBorder()).
 			BorderForeground(Secondary).
 			Padding(0, 1).
@@ -34,13 +30,12 @@ var (
 			MarginBottom(1)
 
 	AssistantStyle = lipgloss.NewStyle().
-			Foreground(Yellow).
+			Foreground(Color3).
 			Bold(true).
 			MarginLeft(2)
 
 	AssistantBubble = lipgloss.NewStyle().
 			Foreground(Text).
-			Background(lipgloss.Color("0")). // Uses terminal background (black/dark)
 			Border(lipgloss.RoundedBorder()).
 			BorderForeground(Secondary).
 			Padding(0, 1).
@@ -48,18 +43,18 @@ var (
 			MarginBottom(1)
 
 	LoadingStyle = lipgloss.NewStyle().
-			Foreground(Accent). // Cyan from theme
+			Foreground(Accent).
 			Border(lipgloss.RoundedBorder()).
 			BorderForeground(Secondary).
 			Blink(true).
 			MarginLeft(2)
 
 	SubtleStyle = lipgloss.NewStyle().
-			Foreground(TextDim) // Gray from theme
+			Foreground(TextDim)
 
 	ChatBorder = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).
-			BorderForeground(Primary). // Blue from theme
+			BorderForeground(Primary).
 			Padding(0, 1)
 
 	HeaderStyle = lipgloss.NewStyle().
@@ -70,7 +65,7 @@ var (
 
 	SelectedItemStyle = lipgloss.NewStyle().
 				Foreground(TextBright).
-				Background(Primary). // Blue highlight
+				Background(Primary).
 				Padding(0, 1, 0, 0).
 				Bold(true)
 
@@ -81,4 +76,21 @@ var (
 	CursorStyle = lipgloss.NewStyle().
 			Foreground(Accent).
 			Bold(true)
+
+	TextAreaFocused = lipgloss.NewStyle().
+			Border(lipgloss.RoundedBorder()).
+			BorderForeground(Primary).
+			Padding(0, 1)
+
+	TextAreaBlurred = lipgloss.NewStyle().
+			Border(lipgloss.RoundedBorder()).
+			BorderForeground(TextDim).
+			Padding(0, 1).
+			Faint(true)
+
+	TextAreaText = lipgloss.NewStyle().
+			Background(lipgloss.NoColor{})
+
+	TextAreaCursorLine = lipgloss.NewStyle().
+				Background(lipgloss.NoColor{})
 )
