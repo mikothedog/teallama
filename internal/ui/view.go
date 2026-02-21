@@ -50,11 +50,10 @@ func (m Model) viewSelect() string {
 }
 
 func (m Model) viewChat() string {
-	// logo := "TEALLAMA"
 	header := HeaderStyle.Render(Logo)
 	indicator := SubtleStyle.Render(fmt.Sprintf("Model: %s", m.client.Model))
 	chatArea := ChatBorder.Render(m.viewport.View())
-	help := SubtleStyle.Render("Enter to send • Ctrl+C to quit")
+	help := SubtleStyle.Render("Enter to send • Ctrl+C to quit • ctrl+↑/↓ to navigate the chat")
 
 	return lipgloss.JoinVertical(
 		lipgloss.Left,

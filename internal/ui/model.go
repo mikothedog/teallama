@@ -75,8 +75,23 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	if m.screen == screenChat {
 		m.textarea, tiCmd = m.textarea.Update(msg)
+
+		switch msg := msg.(type) {
+		case tea.KeyMsg:
+			switch msg.String() {
+			case "ctrl+up":
+				m.viewport.ScrollUp(3)
+				return m, nil
+			case "ctrl+down":
+				m.viewport.ScrollDown(3)
+				return m, nil
+			}
+		default:
+			m.viewport, vpCmd = m.viewport.Update(msg)
+		}
+	} else {
+		m.viewport, vpCmd = m.viewport.Update(msg)
 	}
-	m.viewport, vpCmd = m.viewport.Update(msg)
 
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
@@ -187,7 +202,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 			return m, tea.Batch(
 				tiCmd,
-				commands.StreamRequest(m.client, content, history), // Call from commands
+				commands.StreamRequest(m.client, content, history),
 			)
 		}
 	}
