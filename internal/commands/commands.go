@@ -30,7 +30,7 @@ func LoadModels(client *ollama.Client) tea.Cmd {
 	}
 }
 
-// THIS IS THE COMMAND - wraps the client method in tea.Cmd
+// StreamRequest creates a streaming request to the Ollama API
 func StreamRequest(client *ollama.Client, prompt string, history []models.Message) tea.Cmd {
 	return func() tea.Msg {
 		reader, err := client.StreamRequest(prompt, history) // Calls the method above
